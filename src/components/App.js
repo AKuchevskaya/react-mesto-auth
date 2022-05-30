@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
+import { Switch, Route, Link } from 'react-router-dom';
 import Header from "./Header";
+import ProtectedRoute from "./ProtectedRoute";
+import Register from "./Register";
+import Login from "./Login";
 import Main from "./Main";
 import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
@@ -17,6 +21,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [loggetIn, setLoggetIn] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -119,11 +124,32 @@ function App() {
     setSelectedCard({ ...selectedCard, isOpened: false });
   }
 
+  function handleLogin(data){
+    localStorage.setItem('jwt', data.jwt)
+    setLoggetIn(true)
+  }
+
+  function tokenCheck() {
+    if(localStorage.getItem('jwt')) {
+      let jwt = localStorage.getItem('jwt');
+      Auth.getContent(jwt)
+      .then((res) => {
+        if (res) {
+
+        }
+      })
+    }
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__container">
         <Header />
-        <Main
+        <Switch>
+          <ProtectedRoute 
+          exact path="/"
+          loggedIn={loggedIn}
+          component={Main}
           cards={cards}
           onCardClick={handleCardClick}
           onEditAvatar={handleEditAvatarClick}
@@ -131,7 +157,18 @@ function App() {
           onAddPlace={handleAddPlaceClick}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
-        />
+          >
+          </ProtectedRoute>
+          
+          </Route>
+          <Route path="/sign-up" exact>
+            <Register />
+          </Route>
+          <Route path="/sign-in">
+            <Login />
+          </Route>
+        </Switch>
+        
         <Footer />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
