@@ -1,6 +1,4 @@
-import { useState, useContext, useEffect } from "react";
-import { Link, withRouter } from 'react-router-dom';
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { useState } from "react";
 
 function Login({ handleLogin, tokenCheck }) {
     const [formParams, setFormParams] = useState({
@@ -35,23 +33,12 @@ function handleSubmit(e) {
                 Вход
             </p>
             <form className="login__form" onSubmit={handleSubmit}>
-                <label className="login__email" htmlFor="email">
-                    Email
-                </label>
-                <input className="login__input" id="email" name="email" type="email" value={formParams.email} onChange={handleChange} required />
-                <label className="login__password" htmlFor="password">
-                    Пароль
-                </label>
-                <input className="login__input" id="password" name="password" type="password" value={formParams.password} onChange={handleChange} required />
-                <div className="login__button-container">
-                    <button className="login__button" type="submit">Войти</button>
-                </div>
+                <input className="login__input" id="email" placeholder="Email" name="email" type="email" value={formParams.email} onChange={handleChange} required />
+                <span className="login__input-error"></span>
+                <input className="login__input" id="password" placeholder="Пароль" name="password" type="password" value={formParams.password} onChange={handleChange} required />
+                <span className="login__input-error"></span>
+                <button className="login__button" type="submit">Войти</button>
             </form>
-            <div className="login__signup">
-                <Link to="/signup" className="login__link">
-                    Регистрация
-                </Link>
-            </div>
         </div>
   )
 }
