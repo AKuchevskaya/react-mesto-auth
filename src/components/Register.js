@@ -1,9 +1,23 @@
-import React, { Button } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-function Register () {
-    handleSubmit = (e) => {
-        e.preventDefault()
+function Register ({handleRegister}) {
+    const [formParams, setFormParams] = useState({
+        email: '',
+        password: ''
+    })
+    const handleChange = (e) => {
+        const {name, value} = e.target
+        setFormParams((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const { email, password } = formParams
+
+        handleRegister(formParams)
     }
     return (
         <div className="register">
@@ -11,26 +25,18 @@ function Register () {
                 Регистрация
             </p>
             <form className="register__form" onSubmit={handleSubmit}>
-                <label className="register__email" htmlFor="email">
-                    Email
-                </label>
-                <input className="register__input" id="email" name="email" type="email" value={email} onChange={handleChange} required />
-                <label className="register__password" htmlFor="password">
-                    Пароль
-                </label>
-                <input className="register__input" id="password" name="password" type="password" value={password} onChange={handleChange} required />
-                <div className="register__button-container">
-                    <button className="register__button" type="submit">Зарегистрироваться</button>
-                </div>
+                <input className="register__input" placeholder="Email" id="email" name="email" type="email" value={formParams.email} onChange={handleChange} required />
+                <span className="register__input-error"></span>
+                <input className="register__input" placeholder="Пароль" id="password" name="password" type="password" value={formParams.password} onChange={handleChange} required />
+                <span className="register__input-error"></span>
+                <button className="register__button" type="submit">Зарегистрироваться</button>
+                <p className="register__question">Уже зарегистрированы? 
+                    <Link className="register__link" to="/signin"> Войти</Link>
+                </p>
+                
             </form>
-            <div className="register__signin">
-                <p>Уже зарегистрированы?</p>
-                <Link to="/sign-in" className="register__link">
-                    Войти
-                </Link>
-            </div>
         </div>
     )
 }
 
-export default withRouter(Register);
+export default Register;
