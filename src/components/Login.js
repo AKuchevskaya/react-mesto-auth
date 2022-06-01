@@ -1,10 +1,12 @@
 import { useState } from "react";
 
-function Login({ handleLogin, tokenCheck }) {
+function Login(props) {
     const [formParams, setFormParams] = useState({
         password: '',
         email: ''
     })
+
+    const [message, setMessage] = useState('')
 
     function handleChange(e) {
        const {name, value} = e.target;
@@ -18,12 +20,13 @@ function handleSubmit(e) {
     if (!formParams.password || !formParams.email) {
         return
     }
-    handleLogin({
+    props.handleLogin({
         password: formParams.password, 
         email: formParams.email
     })
-    .catch((err) => {
-        console.log(`Ошибка.....: ${err}`);
+    
+    .catch(err => {
+        setMessage(err.message)
     })
 }
 
@@ -32,6 +35,7 @@ function handleSubmit(e) {
             <p className="login__title">
                 Вход
             </p>
+            <p>{message}</p>
             <form className="login__form" onSubmit={handleSubmit}>
                 <input className="login__input" id="email" placeholder="Email" name="email" type="email" value={formParams.email} onChange={handleChange} required />
                 <span className="login__input-error"></span>

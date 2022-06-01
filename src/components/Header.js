@@ -2,7 +2,8 @@ import React from "react";
 import { Link, Route } from 'react-router-dom';
 import logo from "../../src/images/logo.svg";
 
-function Header({userData, signOut}) {
+function Header(props) {
+  let { email } = props.userData || {};
   return (
     <header className="header">
       <Route>
@@ -24,8 +25,10 @@ function Header({userData, signOut}) {
       </Route>
 
       <Route exact path="/">
-        <p className="header__email">{userData.email}</p>
-        <Link className="header__link" to="/signin" onClick={signOut} >Выйти</Link>
+        <div className="header__box">
+        <p className="header__email">{email}</p>
+        <Link className="header__link" to="/signin" onClick={props.signOut} >Выйти</Link>
+        </div>
       </Route>
     </header>
   );
