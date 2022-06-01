@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./https://akuchevskaya.github.io/react-mesto-auth/static/css/main.076c9f56.css",
-    "main.js": "./https://akuchevskaya.github.io/react-mesto-auth/static/js/main.3bc034a9.js",
+    "main.js": "./https://akuchevskaya.github.io/react-mesto-auth/static/js/main.e95244ae.js",
     "static/js/787.5530211c.chunk.js": "./https://akuchevskaya.github.io/react-mesto-auth/static/js/787.5530211c.chunk.js",
     "static/media/Inter-Bold.woff": "./https://akuchevskaya.github.io/react-mesto-auth/static/media/Inter-Bold.93c1301bd9f486c573b3.woff",
     "static/media/Inter-Black.woff": "./https://akuchevskaya.github.io/react-mesto-auth/static/media/Inter-Black.c6938660eec019fefd68.woff",
@@ -21,11 +21,11 @@
     "static/media/button_close.svg": "./https://akuchevskaya.github.io/react-mesto-auth/static/media/button_close.2ceb783afbab75916ddc.svg",
     "static/media/button_add.svg": "./https://akuchevskaya.github.io/react-mesto-auth/static/media/button_add.d86bb2edc2f6eadb96b7.svg",
     "main.076c9f56.css.map": "./https://akuchevskaya.github.io/react-mesto-auth/static/css/main.076c9f56.css.map",
-    "main.3bc034a9.js.map": "./https://akuchevskaya.github.io/react-mesto-auth/static/js/main.3bc034a9.js.map",
+    "main.e95244ae.js.map": "./https://akuchevskaya.github.io/react-mesto-auth/static/js/main.e95244ae.js.map",
     "787.5530211c.chunk.js.map": "./https://akuchevskaya.github.io/react-mesto-auth/static/js/787.5530211c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.076c9f56.css",
-    "static/js/main.3bc034a9.js"
+    "static/js/main.e95244ae.js"
   ]
 }
