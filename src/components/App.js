@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
+import { Switch, Route, useHistory, Redirect } from "react-router-dom";
 import Header from "./Header";
 import * as Auth from "../utils/Auth.js";
 import ProtectedRoute from "./ProtectedRoute";
@@ -26,54 +26,52 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userData, setUserData]= useState();
+  const [userData, setUserData] = useState();
   const history = useHistory();
   const [isTooltipOpen, setTooltipOpen] = useState(false);
-  const [tooltip, setTooltip] = useState
-  ({
-    image: success, 
-    message: 'Вы успешно зарегистрировались!'
+  const [tooltip, setTooltip] = useState({
+    image: success,
+    message: "Вы успешно зарегистрировались!",
   });
 
   function tokenCheck() {
-    if(localStorage.getItem('token')) {
-      let token = localStorage.getItem('token');
+    if (localStorage.getItem("token")) {
+      let token = localStorage.getItem("token");
       Auth.getContent(token)
-      .then((res) => {
-          const { _id, email } = res.data
-          setLoggedIn(true)
-          setUserData({...userData, _id, email })
-      })
-      .catch((err) => {
-        console.log(`Ошибка проверки токена...: ${err}`)
-      })
+        .then((res) => {
+          const { _id, email } = res.data;
+          setLoggedIn(true);
+          setUserData({ ...userData, _id, email });
+        })
+        .catch((err) => {
+          console.log(`Ошибка проверки токена...: ${err}`);
+        });
     }
   }
 
   useEffect(() => {
-    tokenCheck()
-  }, [])
+    tokenCheck();
+  }, []);
   useEffect(() => {
     if (loggedIn) {
-      history.push("/")
+      history.push("/");
     }
-  }, [loggedIn])
+  }, [loggedIn]);
 
   useEffect(() => {
-    if(loggedIn) {
-    Promise.all([
-      //в Promise.all передаем массив промисов которые нужно выполнить
-      api.getInitialCards(),
-      api.getProfile(),
-    ])
-      .then(([cards, currentUser]) => {
-        setCards(cards);
-        setCurrentUser(currentUser);
-      })
-      .catch((err) => {
-        console.log(`Ошибка получения данных пользователя.....: ${err}`);
-      });
-
+    if (loggedIn) {
+      Promise.all([
+        //в Promise.all передаем массив промисов которые нужно выполнить
+        api.getInitialCards(),
+        api.getProfile(),
+      ])
+        .then(([cards, currentUser]) => {
+          setCards(cards);
+          setCurrentUser(currentUser);
+        })
+        .catch((err) => {
+          console.log(`Ошибка получения данных пользователя.....: ${err}`);
+        });
     }
   }, [loggedIn]);
 
@@ -161,81 +159,74 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setSelectedCard({ ...selectedCard, isOpened: false });
-    setTooltipOpen(false)
+    setTooltipOpen(false);
   }
   function handleRegister({ email, password }) {
     return Auth.register(email, password)
-    .then((res) => {
-      const { email } = res.data;
-      setUserData({...userData, email})
+      .then((res) => {
+        const { email } = res.data;
+        setUserData({ ...userData, email });
         setTooltipOpen(true);
         setTooltip({
-          image: success, 
-          message: 'Вы успешно зарегистрировались!'
+          image: success,
+          message: "Вы успешно зарегистрировались!",
         });
-      history.push("/signin")
-    })
-    .catch((err) => {
-      console.log(`Ошибка регистрации...: ${err}`)
-      setTooltipOpen(true);
-      
-      setTooltip({
-        image: error, 
-        message: 'Что-то пошло не так! Попробуйте ещё раз.'
+        history.push("/signin");
+      })
+      .catch((err) => {
+        console.log(`Ошибка регистрации...: ${err}`);
+        setTooltipOpen(true);
+
+        setTooltip({
+          image: error,
+          message: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
       });
-    })
-    
   }
 
   function handleLogin({ email, password }) {
     return Auth.authorize(email, password)
-    .then((data) => {
-      if(data.token) {
-      console.log('token', data)
-        localStorage.setItem('token', data.token)
-        tokenCheck()
-      }
-    })
-    .catch((err) => {
-      console.log(`Ошибка авторизации...: ${err}`)
-      setTooltipOpen(true);
-      setTooltip({
-        image: error, 
-        message: 'Что-то пошло не так! Попробуйте ещё раз.'
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          tokenCheck();
+        }
+      })
+      .catch((err) => {
+        console.log(`Ошибка авторизации...: ${err}`);
+        setTooltipOpen(true);
+        setTooltip({
+          image: error,
+          message: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
       });
-    })
   }
 
   function signOut() {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setLoggedIn(false);
-    setUserData({ _id: '', email: '' });
+    setUserData({ _id: "", email: "" });
     history.push("/signin");
   }
-  
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__container">
-        <Header 
-        loggedIn={loggedIn}
-        userData={userData}  
-        signOut={signOut} />
+        <Header loggedIn={loggedIn} userData={userData} signOut={signOut} />
         <Switch>
-          <ProtectedRoute 
-          exact path="/"
-          loggedIn={loggedIn}
-          >
-            <Main 
-            cards={cards}
-            onCardClick={handleCardClick}
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}/>
+          <ProtectedRoute exact path="/" loggedIn={loggedIn}>
+            <Main
+              cards={cards}
+              onCardClick={handleCardClick}
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+            />
             <Footer />
           </ProtectedRoute>
-          
+
           <Route path="/signup">
             <Register handleRegister={handleRegister} />
           </Route>
@@ -246,12 +237,12 @@ function App() {
             {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
           </Route>
         </Switch>
-        <InfoTooltip 
-        name="answer"
-        isOpen={isTooltipOpen}
-        onClose={closeAllPopups}
-        tooltip={tooltip.image}
-        message={tooltip.message}
+        <InfoTooltip
+          name="answer"
+          isOpen={isTooltipOpen}
+          onClose={closeAllPopups}
+          tooltip={tooltip.image}
+          message={tooltip.message}
         />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}

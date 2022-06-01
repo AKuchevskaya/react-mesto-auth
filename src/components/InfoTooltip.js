@@ -1,15 +1,6 @@
 import React from "react";
 
-
-function InfoTooltip({
-  name,
-  isOpen,
-  onClose,
-  tooltip,
-   message,
-  
-}) {
-    
+function InfoTooltip({ name, isOpen, onClose, tooltip, message }) {
   return (
     <div className={`popup popup_${name} ${isOpen && "popup_opened"}`}>
       <div className="popup__container">
@@ -18,11 +9,7 @@ function InfoTooltip({
           className="popup__close"
           onClick={onClose}
         ></button>
-        <img 
-        className="popup__info"
-        src={tooltip}
-        alt="иконка ответа"
-      />
+        <img className="popup__info" src={tooltip} alt="иконка ответа" />
         <h3 className="popup__title">{message}</h3>
       </div>
     </div>

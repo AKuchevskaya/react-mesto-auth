@@ -20,7 +20,7 @@ function PopupWithForm({
         ></button>
         <h3 className="popup__title">{title}</h3>
         <form
-          name="fname"
+          name={formName}
           onSubmit={onSubmit}
           className={`popup__form  popup__${formName}`}
         >

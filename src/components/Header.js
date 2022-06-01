@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Route } from 'react-router-dom';
+import { Link, Route } from "react-router-dom";
 import logo from "../../src/images/logo.svg";
 
 function Header(props) {
@@ -26,8 +26,10 @@ function Header(props) {
 
       <Route exact path="/">
         <div className="header__box">
-        <p className="header__email">{email}</p>
-        <Link className="header__link" to="/signin" onClick={props.signOut} >Выйти</Link>
+          <p className="header__email">{email}</p>
+          <Link className="header__link" to="/signin" onClick={props.signOut}>
+            Выйти
+          </Link>
         </div>
       </Route>
     </header>
