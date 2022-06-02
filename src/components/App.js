@@ -11,6 +11,8 @@ import InfoTooltip from "./InfoTooltip";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import DeleteCardPopup from "./DeleteCardPopup";
+
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
@@ -22,9 +24,12 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
+  const [isQwestionPopupOpen, setQwestionPopupOpen] = useState(false);
+
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [removedCard, setRemovedCard] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userData, setUserData] = useState();
   const history = useHistory();
@@ -94,9 +99,10 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .deleteCard(card._id)
+      .deleteCard(removedCard._id)
       .then(() => {
-        setCards((state) => state.filter((item) => item._id !== card._id));
+        setCards((state) => state.filter((item) => item._id !== removedCard._id));
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(`Ошибка удаления карточки.....: ${err}`);
@@ -112,6 +118,10 @@ function App() {
   function handleAddPlaceClick() {
     setAddPlacePopupOpen(true);
   }
+  function handleButtonDeleteClick(card) {
+    setQwestionPopupOpen(true);
+    setRemovedCard(card)
+  } 
 
   function handleCardClick(card) {
     setSelectedCard({
@@ -158,6 +168,7 @@ function App() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
+    setQwestionPopupOpen(false);
     setSelectedCard({ ...selectedCard, isOpened: false });
     setTooltipOpen(false);
   }
@@ -222,7 +233,7 @@ function App() {
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
               onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
+              onCardButtonDeleteClick={handleButtonDeleteClick}
             />
             <Footer />
           </ProtectedRoute>
@@ -261,12 +272,11 @@ function App() {
           onAddPlace={handleAddPlaceSubmit}
         />
 
-        <PopupWithForm
-          name="question"
+        <DeleteCardPopup
+          
+          isOpen={isQwestionPopupOpen}
           onClose={closeAllPopups}
-          title="Вы уверены?"
-          formName="form-question"
-          buttonText="Да"
+          handleCardDelete={handleCardDelete}
         />
 
         <ImagePopup selectedCard={selectedCard} onClose={closeAllPopups} />
