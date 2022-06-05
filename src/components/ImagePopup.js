@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 
 function ImagePopup({ selectedCard, onClose }) {
+
+  useEffect(() => {
+    if (!selectedCard.isOpened) return;
+    
+    function handleEsc(e) {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    }
+  
+    document.addEventListener("keydown", handleEsc);
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    }
+  }, [selectedCard.isOpened]);
+
   return (
     <div
       className={`popup popup_card-review ${
