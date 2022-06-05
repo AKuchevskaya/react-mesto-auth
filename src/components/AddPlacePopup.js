@@ -1,16 +1,23 @@
 import { useState, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({
+  isOpen,
+  onClose,
+  onAddPlace,
+  buttonState,
+  onValidate,
+  errorMessage,
+}) {
   const [cardName, setCardName] = useState("");
   const [cardLink, setCardLink] = useState("");
-  
+
   function handleChangeCardName(e) {
-    setCardName(e.target.value)
+    setCardName(e.target.value);
   }
 
   function handleChangeCardLink(e) {
-    setCardLink(e.target.value)
+    setCardLink(e.target.value);
   }
 
   function handleSubmit(e) {
@@ -18,14 +25,14 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
 
     onAddPlace({
       name: cardName,
-      link: cardLink
+      link: cardLink,
     });
   }
 
   useEffect(() => {
     setCardName("");
     setCardLink("");
-  }, [isOpen])
+  }, [isOpen]);
 
   return (
     <PopupWithForm
@@ -36,6 +43,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       title="Новое место"
       formName="form-add"
       buttonText="Создать"
+      buttonState={buttonState}
+      onValidate={onValidate}
     >
       <input
         onChange={handleChangeCardName}
@@ -43,24 +52,32 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         name="text"
         value={cardName || ""}
         placeholder="Название"
-        className="popup__input popup__input_type_title"
+        className={`popup__input popup__input_type_title ${
+          errorMessage.text && "popup__input_type_error"
+        }`}
         id="title-input"
         required
         minLength="2"
         maxLength="30"
       />
-      <span className="title-input-error popup__error"></span>
+      <span className="title-input-error popup__error">
+        {errorMessage.text && errorMessage.text}
+      </span>
       <input
         onChange={handleChangeCardLink}
         type="url"
         name="link"
         value={cardLink || ""}
         placeholder="Ссылка на картинку"
-        className="popup__input popup__input_type_link"
+        className={`popup__input popup__input_type_link ${
+          errorMessage.link && "popup__input_type_error"
+        }`}
         id="link-input"
         required
       />
-      <span className="link-input-error popup__error"></span>
+      <span className="link-input-error popup__error">
+        {errorMessage.link && errorMessage.link}
+      </span>
     </PopupWithForm>
   );
 }

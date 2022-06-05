@@ -1,21 +1,28 @@
 import React, { useEffect } from "react";
 
-
 function ImagePopup({ selectedCard, onClose }) {
-
   useEffect(() => {
     if (!selectedCard.isOpened) return;
-    
+
     function handleEsc(e) {
       if (e.key === "Escape") {
         onClose();
       }
     }
-  
+
+    function hundleClick(evt) {
+      if (evt.target.classList.contains("popup_opened")) {
+        onClose();
+      }
+    }
+
     document.addEventListener("keydown", handleEsc);
+    document.addEventListener("click", hundleClick);
+
     return () => {
       document.removeEventListener("keydown", handleEsc);
-    }
+      document.removeEventListener("click", hundleClick);
+    };
   }, [selectedCard.isOpened]);
 
   return (

@@ -9,22 +9,31 @@ function PopupWithForm({
   formName,
   children,
   buttonText,
-  isFormValid
+  onValidate,
+  buttonState,
 }) {
-
   useEffect(() => {
-    if (!isOpen) return;
-    
+    if (!isOpen) {
+      return;
+    }
+
     function handleEsc(e) {
       if (e.key === "Escape") {
         onClose();
       }
     }
-  
+    function hundleClick(evt) {
+      if (evt.target.classList.contains("popup_opened")) {
+        onClose();
+      }
+    }
+
     document.addEventListener("keydown", handleEsc);
+    document.addEventListener("click", hundleClick);
     return () => {
       document.removeEventListener("keydown", handleEsc);
-    }
+      document.removeEventListener("click", hundleClick);
+    };
   }, [isOpen]);
 
   return (
@@ -40,11 +49,16 @@ function PopupWithForm({
           name={formName}
           onSubmit={onSubmit}
           className={`popup__form  popup__${formName}`}
+          onChange={onValidate}
+          noValidate
         >
           {children}
-        <button type="submit" className={`popup__save ${(!isFormValid) ? 'popup__save_inactive' : ''}`}>
-          {buttonText}
-        </button>
+          <button
+            type="submit"
+            className={`popup__save ${buttonState && "popup__save_inactive"}`}
+          >
+            {buttonText}
+          </button>
         </form>
       </div>
     </div>

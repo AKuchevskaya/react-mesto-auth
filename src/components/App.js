@@ -37,6 +37,9 @@ function App() {
     message: "Вы успешно зарегистрировались!",
   });
 
+  const [errorMessage, setErrorMessage] = useState({});
+  const [buttonState, setButtonState] = useState(true);
+
   function tokenCheck() {
     if (localStorage.getItem("token")) {
       let token = localStorage.getItem("token");
@@ -99,7 +102,9 @@ function App() {
     api
       .deleteCard(removedCard._id)
       .then(() => {
-        setCards((state) => state.filter((item) => item._id !== removedCard._id));
+        setCards((state) =>
+          state.filter((item) => item._id !== removedCard._id)
+        );
         closeAllPopups();
       })
       .catch((err) => {
@@ -118,8 +123,8 @@ function App() {
   }
   function handleButtonDeleteClick(card) {
     setQwestionPopupOpen(true);
-    setRemovedCard(card)
-  } 
+    setRemovedCard(card);
+  }
 
   function handleCardClick(card) {
     setSelectedCard({
@@ -218,6 +223,24 @@ function App() {
     history.push("/signin");
   }
 
+  function checkInputValidity(evt) {
+    if (!evt.currentTarget.checkValidity()) {
+      setErrorMessage({
+        ...errorMessage,
+        [evt.target.name]: evt.target.validationMessage,
+      });
+      setButtonState(true);
+    } else {
+      setErrorMessage({});
+      setButtonState(false);
+    }
+  }
+
+  useEffect(() => {
+    setErrorMessage({});
+    setButtonState(true);
+  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen]);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__container">
@@ -257,17 +280,26 @@ function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          onValidate={checkInputValidity}
+          buttonState={buttonState}
+          errorMessage={errorMessage}
         />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          onValidate={checkInputValidity}
+          buttonState={buttonState}
+          errorMessage={errorMessage}
         />
 
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
+          onValidate={checkInputValidity}
+          buttonState={buttonState}
+          errorMessage={errorMessage}
         />
 
         <DeleteCardPopup
